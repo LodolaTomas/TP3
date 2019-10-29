@@ -99,3 +99,49 @@
 1571681775 source:/home/tomas/Descargas/TP3/Linux_64/inputs.c
 	"inputs.h"
 
+1572357347 source:/home/alumno/Escritorio/TP3/Controller.c
+	"Controller.h"
+
+1572355429 /home/alumno/Escritorio/TP3/Controller.h
+	<stdio.h>
+	<stdlib.h>
+	"parser.h"
+	"Employee.h"
+
+1572355429 /home/alumno/Escritorio/TP3/parser.h
+	<stdio.h>
+	<stdlib.h>
+	"LinkedList.h"
+	"Employee.h"
+
+1572355429 /home/alumno/Escritorio/TP3/LinkedList.h
+
+1572357091 /home/alumno/Escritorio/TP3/Employee.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"inputs.h"
+
+1572355429 /home/alumno/Escritorio/TP3/inputs.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<time.h>
+
+1572357089 source:/home/alumno/Escritorio/TP3/Employee.c
+	"Employee.h"
+
+1572355429 source:/home/alumno/Escritorio/TP3/main.c
+	<stdio.h>
+	<stdlib.h>
+	"LinkedList.h"
+	"Controller.h"
+	"Employee.h"
+
+1572355429 source:/home/alumno/Escritorio/TP3/parser.c
+	"parser.h"
+
+1572355429 source:/home/alumno/Escritorio/TP3/inputs.c
+	"inputs.h"
+

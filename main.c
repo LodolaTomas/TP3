@@ -26,8 +26,8 @@ int main()
 
     do
     {
-        printf("Eleji una opcion: ");
-        scanf("%d",&option);
+        getValidInt("Menu:\n1. Cargar los datos de los empleados desde el archivo data.csv (modo texto).\n2. Cargar los datos de los empleados desde el archivo data.csv (modo binario).\n3. Alta de empleado\n4. Modificar datos de empleado\n5. Baja de empleado\n6. Listar empleados\n7. Ordenar empleados\n8. Guardar los datos de los empleados en el archivo data.csv (modo texto).\n9. Guardar los datos de los empleados en el archivo data.csv (modo binario).\n10. Salir\n Elija una opcion: ","Error",1,10,&option);
+
         switch(option)
         {
         case 1:
@@ -75,6 +75,7 @@ int main()
             break;
 
         }
+
     }
     while(option != 10);
     return 0;

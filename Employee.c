@@ -8,6 +8,7 @@ Employee* employee_new()
 
     return oneEmployee;
 }
+
 Employee* employee_newParametros(char* idStr,char* nombreStr,char* horasTrabajadasStr,char* sueldoStr)
 {
     Employee* p=employee_new();
@@ -16,15 +17,16 @@ Employee* employee_newParametros(char* idStr,char* nombreStr,char* horasTrabajad
     {
         employee_setId(p,atoi(idStr));
         employee_setNombre(p,nombreStr);
-        fflush(stdin);
         employee_setHorasTrabajadas(p,atoi(horasTrabajadasStr));
         employee_setSueldo(p,atof(sueldoStr));
+
     }
     return  p;
 }
 void employee_delete(Employee* this)
 {
     free(this);
+    this=NULL;
 }
 
 int employee_setId(Employee* this,int id)
