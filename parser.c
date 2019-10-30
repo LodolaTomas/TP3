@@ -36,6 +36,7 @@ int parser_EmployeeFromText(FILE* pFile, LinkedList* pArrayListEmployee)
         }
         state=0;//Cambio el estado
         fclose(pFile);
+        borrar();
         printf("Fueron cargados : %d\n ",counter);//idea de passu
     }
 

@@ -70,13 +70,13 @@ int controller_addEmployee(LinkedList* pArrayListEmployee)
         employee_setSueldo(this,salario);
         borrar();
         printf("**************************************************************************************\n");
-        controller_ShowOneEmployee(this);
+        employee_ShowOneEmployee(this);
         printf("**************************************************************************************\n");
-        state=1;
+        state=0;
         if(verifyConformity("Esta seguro de guardar este Empleado?[Si/No]:","Error, [Si/No]")==1)
         {
             ll_add(pArrayListEmployee,this);
-            state=0;
+            state=1;
         }
     }
     return state;
@@ -89,12 +89,25 @@ int controller_addEmployee(LinkedList* pArrayListEmployee)
  * \return int
  *
  */
-/*int controller_editEmployee(LinkedList* pArrayListEmployee)
+int controller_editEmployee(LinkedList* pArrayListEmployee)
 {
-    int satate=-1;
+    int state=-1;//-1 si el pArrayListEmployee es NULL
+    int option;
+    Employee* this=NULL;
+    if(pArrayListEmployee!=NULL)
+    {
+        state=0;//0 si no se encontro al empleado buscado
+        controller_ListEmployee(pArrayListEmployee);
+        getValidInt("Elija un Empleado: ","Error, Solo ID de Empleados",0,100000,&option);
+        this=(Employee*)ll_get(pArrayListEmployee,option-1);//Busco al Empleado
+        if(this!=NULL)
+        {
+            state=employee_ModifyEmployee(this);
+        }
+    }
 
     return state;
-}*/
+}
 
 /** \brief Baja de empleado
  *
@@ -105,7 +118,31 @@ int controller_addEmployee(LinkedList* pArrayListEmployee)
  */
 int controller_removeEmployee(LinkedList* pArrayListEmployee)
 {
-    return 1;
+    int state=-1;
+    int option;
+    Employee* this=NULL;
+
+    if(pArrayListEmployee!=NULL)
+    {
+        state=0;//0 si no se encontro al empleado buscado
+        controller_ListEmployee(pArrayListEmployee);
+        getValidInt("Elija un Empleado: ","Error, Solo ID de Empleados",0,100000,&option);
+        this=(Employee*)ll_get(pArrayListEmployee,option-1);//Busco al Empleado
+        if(this!=NULL)
+        {
+            state=1;
+            borrar();
+            printf("**************************************************************************************\n");
+            employee_ShowOneEmployee(this);
+            printf("**************************************************************************************\n");
+            if(verifyConformity("Esta seguro de Borrar este Empleado?[Si/No]: ","Error, [Si/No]")==1)
+            {
+                state=2;
+                ll_remove(pArrayListEmployee,option-1);
+            }
+        }
+    }
+    return state;
 }
 
 /** \brief Listar empleados
@@ -127,21 +164,15 @@ int controller_ListEmployee(LinkedList* pArrayListEmployee)
         printf("%5s %15s %15s %15s\n","ID","NOMBRE","HORAS","SUELDO");
         for(i=0; i<len; i++)
         {
-            this=ll_get(pArrayListEmployee,i);//Obtengo un Empleado segun id y lo muestro
-            controller_ShowOneEmployee(this);
+            this=(Employee*)ll_get(pArrayListEmployee,i);//Obtengo un Empleado segun id y lo muestro
+            employee_ShowOneEmployee(this);
         }
         state=0;
     }
     return state;
 }
 
-void controller_ShowOneEmployee(Employee* this)
-{
-    if(this!=NULL)
-    {
-    printf("%5d %15s %15d %15.2f\n",this->id,this->nombre,this->horasTrabajadas,this->sueldo);
-    }
-}
+
 
 /** \brief Ordenar empleados
  *
@@ -181,7 +212,7 @@ int controller_saveAsText(char* path, LinkedList* pArrayListEmployee)
 
         for(i=0; i<len; i++)
         {
-            this=ll_get(pArrayListEmployee,i);
+            this=(Employee*)ll_get(pArrayListEmployee,i);
             employee_getId(this,&id);
             employee_getNombre(this,nombre);
             employee_getHorasTrabajadas(this,&horasTrabajadas);
@@ -214,7 +245,7 @@ int controller_saveAsBinary(char* path, LinkedList* pArrayListEmployee)
 
         for(i=0; i<len; i++) //Recorro el Array de empleados
         {
-            this=ll_get(pArrayListEmployee,i);//obtengo el empleado en la posicion i
+            this=(Employee*)ll_get(pArrayListEmployee,i);//obtengo el empleado en la posicion i
             fwrite(this,sizeof(Employee),1,pArchivo);//y lo escribo en el archivo
         }
         state=0;

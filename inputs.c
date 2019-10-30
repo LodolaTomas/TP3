@@ -278,7 +278,6 @@ int verifyConformity (char message[], char cancelMessage[])
     borrar();
     if (respuesta==0)
     {
-
         save=1;
     }
     return save;
