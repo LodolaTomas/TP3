@@ -54,7 +54,7 @@ int employee_getId(Employee* this,int* id)
 int employee_setNombre(Employee* this,char* nombre)
 {
     int state=-1;
-    if(this!=NULL && nombre[0]!='\0')
+    if(this!=NULL && nombre!=NULL)
     {
         strcpy(this->nombre,nombre);
         state=0;
@@ -65,7 +65,7 @@ int employee_setNombre(Employee* this,char* nombre)
 int employee_getNombre(Employee* this,char* nombre)
 {
     int state=-1;
-    if(this!=NULL && nombre[0]!='\0')
+    if(this!=NULL && nombre!=NULL)
     {
         strcpy(nombre,this->nombre);
         state=0;
@@ -76,7 +76,7 @@ int employee_getNombre(Employee* this,char* nombre)
 int employee_setHorasTrabajadas(Employee* this,int horasTrabajadas)
 {
     int state=-1;
-    if(this!=NULL)
+    if(this!=NULL && horasTrabajadas>=0)
     {
         this->horasTrabajadas=horasTrabajadas;
         state=0;
@@ -87,7 +87,7 @@ int employee_setHorasTrabajadas(Employee* this,int horasTrabajadas)
 int employee_getHorasTrabajadas(Employee* this,int* horasTrabajadas)
 {
     int state=-1;
-    if(this!=NULL)
+    if(this!=NULL && horasTrabajadas!=NULL)
     {
         *horasTrabajadas=this->horasTrabajadas;
         state=0;
@@ -98,7 +98,7 @@ int employee_getHorasTrabajadas(Employee* this,int* horasTrabajadas)
 int employee_setSueldo(Employee* this,int sueldo)
 {
     int state=-1;
-    if(this!=NULL)
+    if(this!=NULL && sueldo>=0)
     {
         this->sueldo=sueldo;
         state=0;
@@ -108,7 +108,7 @@ int employee_setSueldo(Employee* this,int sueldo)
 int employee_getSueldo(Employee* this,int* sueldo)
 {
     int state=-1;
-    if(this!=NULL)
+    if(this!=NULL && sueldo!=NULL)
     {
         *sueldo=this->sueldo;
         state=0;
@@ -167,58 +167,92 @@ int employee_ModifyEmployee(Employee* this)
 
 void employee_showEmployee(Employee oneEmployee)
 {
-    printf("****************************************************\n");
+    printf("**************************************************************************************\n");
     printf("%5s %15s %15s %15s\n","ID","NOMBRE","HORAS","SUELDO");
     printf("%5d %15s %15d %15.2f\n",oneEmployee.id,oneEmployee.nombre,oneEmployee.horasTrabajadas,oneEmployee.sueldo);
-    printf("****************************************************\n");
+    printf("**************************************************************************************\n");
 }
-/*
-int option;
-    Employee* this=NULL;
-    Employee oneEmployee;
 
-    if(pArrayListEmployee!=NULL)
+int employee_compareById(void* pElementOne, void* pElementTwo)
+{
+    int state = 1;
+    Employee* auxEmp1 = (Employee*) pElementOne;
+    Employee* auxEmp2 = (Employee*) pElementTwo;
+
+    if (auxEmp1->id < auxEmp2->id)
     {
-        //len=ll_len(pArrayListEmployee);
-        state=0;
-        controller_ListEmployee(pArrayListEmployee);
-        getValidInt("Elija un Empleado: ","Error, Solo ID de Empleados",0,100000,&option);
-        this=(Employee*)ll_get(pArrayListEmployee,option-1);
-        if(this!=NULL)
-        {
-            borrar();
-            option=0;
-            state=1;
-            do
-            {
-                printf("%30s\n","MODIFICAR");
-                printf("***********************************************************************\n");
-                controller_ShowOneEmployee(this);
-                printf("***********************************************************************\n");
-                getValidInt("1. Nombre\n2. Horas Trabajadas\n3. Sueldo\n4. Salir\nElija una opcion: ","Error, solo numeros",1,4,&option);
-
-                switch(option)
-                {
-                case 1:
-                    getValidString("Ingrese el nuevo Nombre: ","Error, solo letras",0,50,this->nombre);
-                    break;
-                case 2:
-                    getValidInt("Ingrese nuevas Horas Trabajadas: ","Error, solo Numeros",0,100,&this->horasTrabajadas);
-                    break;
-                case 3:
-                    getValidFloat("Ingrese nuevo salario: ","Error, solo Numeros",0,100000,&this->sueldo);
-                    break;
-                case 4:
-
-                    break;
-                }
-            borrar();
-            }
-            while(option!=4);
-        }
-
+        state = -1;
     }
-*/
+    else if (auxEmp1->id == auxEmp2->id)
+    {
+        state = 0;
+    }
 
+    auxEmp1 = NULL;
+    auxEmp2 = NULL;
+    return state;
+}
 
+int employee_compareByName(void* pElementOne, void* pElementTwo)
+{
+    int retorno=1;
+    Employee* oneEmployee=(Employee*)pElementOne;
+    Employee* twoEmployee=(Employee*)pElementTwo;
+    char name1[49];
+    char name2[49];
+    employee_getNombre(oneEmployee,name1);
+    employee_getNombre(twoEmployee,name2);
+    if(strcmp(name1,name2)<0)
+    {
+        retorno=-1;
+    }
+    if(strcmp(name1,name2)==0)
+    {
+        retorno=2;
+    }
+    return retorno;
+}
 
+int employee_compareByHoursWorked(void* pElementOne, void* pElementTwo)
+{
+    int retorno=-1;
+    int oneHoursWorked;
+    int twoHoursWorked;
+    Employee* oneEmployee=(Employee*)pElementOne;
+    Employee* twoEmployee=(Employee*)pElementTwo;
+    employee_getHorasTrabajadas(oneEmployee,&oneHoursWorked);
+    employee_getHorasTrabajadas(twoEmployee,&twoHoursWorked);
+
+    if(oneHoursWorked<twoHoursWorked)
+    {
+        retorno=-1;
+    }
+    else if(oneHoursWorked==twoHoursWorked)
+    {
+        retorno=0;
+    }
+
+    return retorno;
+}
+
+int employee_compareBySalary(void* pElementOne, void* pElementTwo)
+{
+    int retorno=1;
+    int oneSalary;
+    int twoSalary;
+    Employee* oneEmployee=(Employee*)pElementOne;
+    Employee* twoEmployee=(Employee*)pElementTwo;
+    employee_getSueldo(oneEmployee,&oneSalary);
+    employee_getSueldo(twoEmployee,&twoSalary);
+
+    if(oneSalary<twoSalary)
+    {
+        retorno=-1;
+    }
+    else if(oneSalary==twoSalary)
+    {
+        retorno=0;
+    }
+
+    return retorno;
+}

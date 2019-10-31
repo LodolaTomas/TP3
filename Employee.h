@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "inputs.h"
+
 #ifndef employee_H_INCLUDED
 #define employee_H_INCLUDED
 typedef struct
@@ -31,6 +32,11 @@ int employee_getSueldo(Employee* this,int* sueldo);
 void employee_ShowOneEmployee(Employee* this);
 int employee_ModifyEmployee(Employee* this);
 int employee_AddEmployee(Employee* this);
+
 void employee_showEmployee(Employee oneEmployee);
+int employee_compareById(void* pElementOne, void* pElementTwo);
+int employee_compareByName(void* pElementOne, void* pElementTwo);
+int employee_compareByHoursWorked(void* pElementOne, void* pElementTwo);
+int employee_compareBySalary(void* pElementOne, void* pElementTwo);
 
 #endif // employee_H_INCLUDED

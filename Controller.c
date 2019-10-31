@@ -105,7 +105,6 @@ int controller_editEmployee(LinkedList* pArrayListEmployee)
             state=employee_ModifyEmployee(this);
         }
     }
-
     return state;
 }
 
@@ -161,12 +160,15 @@ int controller_ListEmployee(LinkedList* pArrayListEmployee)
 
     if(pArrayListEmployee!=NULL)
     {
+        printf("**************************************************************************************\n");
         printf("%5s %15s %15s %15s\n","ID","NOMBRE","HORAS","SUELDO");
+        printf("**************************************************************************************\n");
         for(i=0; i<len; i++)
         {
             this=(Employee*)ll_get(pArrayListEmployee,i);//Obtengo un Empleado segun id y lo muestro
             employee_ShowOneEmployee(this);
         }
+        printf("**************************************************************************************\n");
         state=0;
     }
     return state;
@@ -183,7 +185,73 @@ int controller_ListEmployee(LinkedList* pArrayListEmployee)
  */
 int controller_sortEmployee(LinkedList* pArrayListEmployee)
 {
-    return 1;
+    int state=-1;
+    int opcion;
+    int orden;
+    if(pArrayListEmployee!=NULL)
+    {
+        LinkedList* pArrayListEmployee2=ll_clone(pArrayListEmployee);//clono la lista
+                                                        //para que el ordenamiento no modifique mi archivo
+        do
+        {
+            printf("%30s\n","ORDENAR");
+            getValidInt("1. ID\n2. Nombre\n3. Horas Trabajadas\n4. Sueldo\n5. Salir\nElija una opcion: ","Error, Solo numeros",1,5,&opcion);
+            switch(opcion)
+            {
+            case 1:
+                borrar();
+                getValidInt("1. Mayor a Menor\n2. Menor a Mayor\nElija una opcion: ","Error, Solo numeros",1,2,&orden);
+                borrar();
+                printf("Aguarde un Momento\n");
+                if(ll_sort(pArrayListEmployee2,employee_compareById,orden-1)==0)
+                {
+                    controller_ListEmployee(pArrayListEmployee2);
+                }
+                pausa();
+                break;
+            case 2:
+                borrar();
+                getValidInt("1. Ascendente\n2. Descendente\nElija una opcion: ","Error, Solo numeros",1,2,&orden);
+                borrar();
+                printf("Aguarde un Momento\n");
+                if(ll_sort(pArrayListEmployee2,employee_compareByName,orden-1)==0)
+                {
+                    controller_ListEmployee(pArrayListEmployee2);
+                }
+                pausa();
+                break;
+            case 3:
+                borrar();
+                getValidInt("1. Mayor a Menor\n2. Menor a Mayor\nElija una opcion: ","Error, Solo numeros",1,2,&orden);
+                borrar();
+                printf("Aguarde un Momento\n");
+                if(ll_sort(pArrayListEmployee2,employee_compareByHoursWorked,orden-1)==0)
+                {
+                    controller_ListEmployee(pArrayListEmployee2);
+                }
+                pausa();
+                break;
+            case 4:
+                borrar();
+                getValidInt("1. Mayor a Menor\n2. Menor a Mayor\nElija una opcion: ","Error, Solo numeros",1,2,&orden);
+                borrar();
+                printf("Aguarde un Momento\n");
+                if(ll_sort(pArrayListEmployee2,employee_compareBySalary,orden-1)==0)
+                {
+                    controller_ListEmployee(pArrayListEmployee2);
+                }
+                pausa();
+                break;
+            case 5:
+                ll_deleteLinkedList(pArrayListEmployee2);//borro la lista para que no moleste
+                break;
+            }
+            borrar();
+        }
+        while(opcion!=5);
+        state=0;
+    }
+    return state;
 }
 
 /** \brief Guarda los datos de los empleados en el archivo data.csv (modo texto).
@@ -254,4 +322,3 @@ int controller_saveAsBinary(char* path, LinkedList* pArrayListEmployee)
 
     return state;
 }
-

@@ -89,3 +89,47 @@
 1572407528 source:/home/tomas/Descargas/TP3/Linux_64/parser.c
 	"parser.h"
 
+1572488188 source:/home/tomas/Escritorio/progLabo1/TP3/Controller.c
+	"Controller.h"
+
+1572453367 /home/tomas/Escritorio/progLabo1/TP3/Controller.h
+	<stdio.h>
+	<stdlib.h>
+	"parser.h"
+
+1572452178 /home/tomas/Escritorio/progLabo1/TP3/parser.h
+	<stdio.h>
+	<stdlib.h>
+	"LinkedList.h"
+	"Employee.h"
+
+1572453367 /home/tomas/Escritorio/progLabo1/TP3/LinkedList.h
+
+1572479700 /home/tomas/Escritorio/progLabo1/TP3/Employee.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"inputs.h"
+
+1572486406 /home/tomas/Escritorio/progLabo1/TP3/inputs.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<unistd.h>
+	<time.h>
+
+1572487898 source:/home/tomas/Escritorio/progLabo1/TP3/Employee.c
+	"Employee.h"
+
+1572486406 source:/home/tomas/Escritorio/progLabo1/TP3/inputs.c
+	"inputs.h"
+
+1572453853 source:/home/tomas/Escritorio/progLabo1/TP3/parser.c
+	"parser.h"
+
+1572480161 source:/home/tomas/Escritorio/progLabo1/TP3/main.c
+	<stdio.h>
+	<stdlib.h>
+	"Controller.h"
+
