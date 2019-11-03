@@ -19,7 +19,6 @@ Employee* employee_newParametros(char* idStr,char* nombreStr,char* horasTrabajad
         employee_setNombre(p,nombreStr);
         employee_setHorasTrabajadas(p,atoi(horasTrabajadasStr));
         employee_setSueldo(p,atof(sueldoStr));
-
     }
     return  p;
 }
@@ -32,7 +31,7 @@ void employee_delete(Employee* this)
 int employee_setId(Employee* this,int id)
 {
     int state=-1;
-    if(this!=NULL)
+    if(this!=NULL && id>0)
     {
         this->id=id;
         state=0;
@@ -43,7 +42,7 @@ int employee_setId(Employee* this,int id)
 int employee_getId(Employee* this,int* id)
 {
     int state=-1;
-    if(this!=NULL && *id>0)
+    if(this!=NULL && id!=NULL)
     {
         *id=this->id;
         state=0;
@@ -164,6 +163,8 @@ int employee_ModifyEmployee(Employee* this)
     }
     return state;
 }
+
+
 
 void employee_showEmployee(Employee oneEmployee)
 {

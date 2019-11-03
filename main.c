@@ -23,6 +23,8 @@ int main()
     int respuesta;
     int flag=0;
     LinkedList* listaEmpleados = ll_newLinkedList();
+    int id;
+
     do
     {
         borrar();
@@ -35,7 +37,7 @@ int main()
             {
                 flag=1;
                 printf("Cargado exitosamente en Texto\n");
-
+                controller_GetLastId(listaEmpleados,&id);
             }
             pausa();
             break;
@@ -45,7 +47,7 @@ int main()
             {
                 flag=1;
                 printf("Cargado exitosamente en Binario\n");
-
+                controller_GetLastId(listaEmpleados,&id);
             }
             pausa();
             break;
@@ -53,7 +55,7 @@ int main()
             borrar();
             if(flag!=0)
             {
-                respuesta=controller_addEmployee(listaEmpleados);
+                respuesta=controller_addEmployee(listaEmpleados,&id);
                 switch(respuesta)
                 {
                 case -1:
@@ -154,8 +156,8 @@ int main()
             pausa();
             break;
         case 7:
-        borrar();
-        if(flag!=0)
+            borrar();
+            if(flag!=0)
             {
                 if(controller_sortEmployee(listaEmpleados)==0)
                 {
@@ -166,7 +168,7 @@ int main()
             {
                 printf("Debe abrir el archivo[.txt o .bin] antes de ordenar los empleados\n");
             }
-        pausa();
+            pausa();
             break;
         case 8:
             borrar();

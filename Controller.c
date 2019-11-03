@@ -48,23 +48,23 @@ int controller_loadFromBinary(char* path, LinkedList* pArrayListEmployee)
  * \return int
  *
  */
-int controller_addEmployee(LinkedList* pArrayListEmployee)
+int controller_addEmployee(LinkedList* pArrayListEmployee,int *id)
 {
     int state=-1;
     Employee* this=employee_new();
-
-    int id;
+    int idAux=*id;
     char nombre[50];
     int horasTrabajadas;
     int salario;
 
     if(pArrayListEmployee!=NULL && this!=NULL)
     {
-        getValidInt("Ingrese ID: ","Error, solo Numeros",0,10000,&id);
-        employee_setId(this,id);
+        idAux++;
+        employee_setId(this,idAux);
+        printf("El id del empleado sera: [%d]\n",idAux);
         getValidName("Ingrese Nombre: ","Error, Solo Letras",0,49,nombre);
         employee_setNombre(this,nombre);
-        getValidInt("Ingrese Horas Trabajadas: ","Error, Solo Numeros",0,100,&horasTrabajadas);
+        getValidInt("Ingrese Horas Trabajadas: ","Error, Solo Numeros",1,100,&horasTrabajadas);
         employee_setHorasTrabajadas(this,horasTrabajadas);
         getValidInt("Ingrese Salario: ","Error, Solo Numeros",0,10000,&salario);
         employee_setSueldo(this,salario);
@@ -76,6 +76,7 @@ int controller_addEmployee(LinkedList* pArrayListEmployee)
         if(verifyConformity("Esta seguro de guardar este Empleado?[Si/No]:","Error, [Si/No]")==1)
         {
             ll_add(pArrayListEmployee,this);
+            *id=idAux;
             state=1;
         }
     }
@@ -92,16 +93,15 @@ int controller_addEmployee(LinkedList* pArrayListEmployee)
 int controller_editEmployee(LinkedList* pArrayListEmployee)
 {
     int state=-1;//-1 si el pArrayListEmployee es NULL
-    int option;
     Employee* this=NULL;
+    int answer;
     if(pArrayListEmployee!=NULL)
     {
         state=0;//0 si no se encontro al empleado buscado
-        controller_ListEmployee(pArrayListEmployee);
-        getValidInt("Elija un Empleado: ","Error, Solo ID de Empleados",0,100000,&option);
-        this=(Employee*)ll_get(pArrayListEmployee,option-1);//Busco al Empleado
-        if(this!=NULL)
+        answer=controller_FindId(pArrayListEmployee);
+        if(answer!=-1)
         {
+            this=(Employee*)ll_get(pArrayListEmployee,answer);
             state=employee_ModifyEmployee(this);
         }
     }
@@ -118,18 +118,17 @@ int controller_editEmployee(LinkedList* pArrayListEmployee)
 int controller_removeEmployee(LinkedList* pArrayListEmployee)
 {
     int state=-1;
-    int option;
+    int answer;
     Employee* this=NULL;
 
     if(pArrayListEmployee!=NULL)
     {
         state=0;//0 si no se encontro al empleado buscado
-        controller_ListEmployee(pArrayListEmployee);
-        getValidInt("Elija un Empleado: ","Error, Solo ID de Empleados",0,100000,&option);
-        this=(Employee*)ll_get(pArrayListEmployee,option-1);//Busco al Empleado
-        if(this!=NULL)
+        answer=controller_FindId(pArrayListEmployee);
+        if(answer!=-1)
         {
             state=1;
+            this=(Employee*)ll_get(pArrayListEmployee,answer);
             borrar();
             printf("**************************************************************************************\n");
             employee_ShowOneEmployee(this);
@@ -137,7 +136,7 @@ int controller_removeEmployee(LinkedList* pArrayListEmployee)
             if(verifyConformity("Esta seguro de Borrar este Empleado?[Si/No]: ","Error, [Si/No]")==1)
             {
                 state=2;
-                ll_remove(pArrayListEmployee,option-1);
+                ll_remove(pArrayListEmployee,answer);
             }
         }
     }
@@ -155,7 +154,7 @@ int controller_ListEmployee(LinkedList* pArrayListEmployee)
 {
     int state=-1;
     int i;
-    int len=ll_len(pArrayListEmployee);
+    int len;
     Employee* this=NULL;
 
     if(pArrayListEmployee!=NULL)
@@ -163,6 +162,7 @@ int controller_ListEmployee(LinkedList* pArrayListEmployee)
         printf("**************************************************************************************\n");
         printf("%5s %15s %15s %15s\n","ID","NOMBRE","HORAS","SUELDO");
         printf("**************************************************************************************\n");
+        len=ll_len(pArrayListEmployee);
         for(i=0; i<len; i++)
         {
             this=(Employee*)ll_get(pArrayListEmployee,i);//Obtengo un Empleado segun id y lo muestro
@@ -191,7 +191,7 @@ int controller_sortEmployee(LinkedList* pArrayListEmployee)
     if(pArrayListEmployee!=NULL)
     {
         LinkedList* pArrayListEmployee2=ll_clone(pArrayListEmployee);//clono la lista
-                                                        //para que el ordenamiento no modifique mi archivo
+        //para que el ordenamiento no modifique mi archivo
         do
         {
             printf("%30s\n","ORDENAR");
@@ -266,7 +266,7 @@ int controller_saveAsText(char* path, LinkedList* pArrayListEmployee)
     int state=-1;
     int i;
     Employee* this=NULL;
-    int len=ll_len(pArrayListEmployee);
+    int len;
     FILE* pArchivo=fopen(path,"w");
 
     int id;
@@ -277,7 +277,7 @@ int controller_saveAsText(char* path, LinkedList* pArrayListEmployee)
     if(pArchivo!=NULL && pArrayListEmployee!=NULL)
     {
         fprintf(pArchivo,"id,nombre,horasTrabajadas,Salario\n");
-
+        len=ll_len(pArrayListEmployee);
         for(i=0; i<len; i++)
         {
             this=(Employee*)ll_get(pArrayListEmployee,i);
@@ -304,21 +304,75 @@ int controller_saveAsBinary(char* path, LinkedList* pArrayListEmployee)
 {
     int state=-1;
     int i;
-    int len=ll_len(pArrayListEmployee);
+    int len;
     Employee* this=NULL;
     FILE* pArchivo=fopen(path,"wb");//abro el archivo en modo write binary
 
     if(pArchivo!=NULL && pArrayListEmployee!=NULL)//Verifico que nada sea NULL
     {
-
+        len=ll_len(pArrayListEmployee);
         for(i=0; i<len; i++) //Recorro el Array de empleados
         {
             this=(Employee*)ll_get(pArrayListEmployee,i);//obtengo el empleado en la posicion i
             fwrite(this,sizeof(Employee),1,pArchivo);//y lo escribo en el archivo
         }
-        state=0;
         fclose(pArchivo);//Cierro el archivo
+        state=0;
     }
 
     return state;
+}
+
+void controller_GetLastId(LinkedList* pArrayListEmployee,int* id)
+{
+    int len;
+    int i,flag=0;
+    Employee* OneEmployee;
+    int max;
+    int idAux;
+    if(pArrayListEmployee!=NULL && id!=NULL)
+    {
+        len=ll_len(pArrayListEmployee);
+        for(i=0; i<len; i++)
+        {
+            OneEmployee=(Employee*)ll_get(pArrayListEmployee,i);//Obtengo un Empleado por cada iteracion del for
+            employee_getId(OneEmployee,&idAux);// de cada Empleado obtengo el id
+            if(idAux > max || flag == 0)
+            {
+                flag=1;
+                max=idAux;
+            }
+        }
+
+        *id=max;
+    }
+}
+
+int controller_FindId(LinkedList* pArrayListEmployee)
+{
+    int retorno=-1;
+    int opcion;
+    int len;
+    int i;
+    Employee* this;
+    int idAux=0;
+
+    if(pArrayListEmployee!=NULL)
+    {
+        len=ll_len(pArrayListEmployee);
+        controller_ListEmployee(pArrayListEmployee);
+        getValidInt("Ingrese el id del Empleado: ","Error, solo numeros",0,100000,&opcion);
+        for(i=0; i<len; i++)
+        {
+            this=(Employee*)ll_get(pArrayListEmployee,i);
+            employee_getId(this,&idAux);
+            if(opcion==idAux)
+            {
+                retorno=i;
+                break;
+            }
+        }
+
+    }
+    return retorno;
 }
